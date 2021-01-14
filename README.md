@@ -38,7 +38,7 @@
 ## - ตั้งเวลาการทำงาน Relay
 ยังไม่ได้เขียน
 
-## - ดู LOG กาต่างๆ
+## - ดู LOG ต่างๆ
 ยังไม่ได้เขียน
 
 For help getting started with Flutter, view our
