@@ -1,5 +1,5 @@
 # PROJECT CONTROL
-![image](https://scontent.fbkk7-3.fna.fbcdn.net/v/t1.15752-9/130249868_115483140309156_3858231045786407963_n.png?_nc_cat=107&ccb=2&_nc_sid=ae9488&_nc_ohc=xtj_G1TsPc4AX_OIR4j&_nc_ht=scontent.fbkk7-3.fna&oh=761cab30488034ed04d87a8e7123236e&oe=5FF42C61)
+![image](images/logo.png)
 
 เป็นโปรเจคเกี่ยวกับการควบคุมอุปกรณ์เครื่องใช้ไฟฟ้าด้วยเทคโนโลยี IOT ที่ทำขึ้นสมัยเป็นโปรเจคจบมหาลัยโดยเริ่มทำจากกการเขียน HTML Jquery Boostrap PHP MYSQL จากนั้นผมได้สนใจการเขียน Moblie Application เลยศึกษาการเขียน Moblie Application เลยไปเจอ ตัว Flutter จึงเริ่มเขียนมันโดยใช้เวลายามว่างในการเขียนและศึกษาการทำ Mobile Application ใช้กับ IOT โดย font-end เขียน flutter ส่วน back-end nodejs-express Mongodb mongoose ส่วนฝั่ง IOT เขียน NodeMCU ใช้ในการส่งข้อมูลมายัง API
 
