@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:projectcontrol_app/bloc/bloc_log/log_bloc.dart';
 import 'package:projectcontrol_app/bloc/bloc_sensor/sensor_bloc.dart';
-import 'package:projectcontrol_app/resources/repository.dart';
+import 'package:projectcontrol_app/resources/api_repository.dart';
 import 'package:projectcontrol_app/stream_api/stream_data.dart';
 import 'package:projectcontrol_app/view/screen/Sensor/Components/Mobile/body_sensor_mobile.dart';
 import 'package:projectcontrol_app/view/widget/AppDrawer/app_drawer.dart';
@@ -47,8 +47,7 @@ class _SensorScreenMobileState extends State<SensorScreenMobile>
           BlocProvider<SensorBloc>(
             create: (context) => SensorBloc(StreamData()),
           ),
-          BlocProvider<LogBloc>(
-              create: (context) => LogBloc(Repository(), StreamData())),
+          BlocProvider<LogBloc>(create: (context) => LogBloc(ApiRepository())),
         ],
         child: BodySensorPortrait(
             itemCategory: itemCategory,

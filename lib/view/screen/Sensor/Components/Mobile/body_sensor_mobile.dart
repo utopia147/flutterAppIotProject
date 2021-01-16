@@ -176,7 +176,8 @@ class _BodySensorPortraitState extends State<BodySensorPortrait> {
             category = value;
           });
           _sensorBloc.add(LoadDataSensor(category));
-          _logBloc.add(LogFetchedData(category));
+          _logBloc.add(LogFetchedData(category, DateTime.now().year.toInt(),
+              DateTime.now().month.toInt()));
         },
       ),
     );

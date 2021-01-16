@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectcontrol_app/bloc/bloc_log/log_bloc.dart';
 import 'package:projectcontrol_app/model/chart_logs.dart';
 import 'package:projectcontrol_app/model/logs.dart';
+import 'package:projectcontrol_app/view/state_widget/error_state.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class TabBodySensorBarchart extends StatelessWidget {
@@ -16,27 +17,90 @@ class TabBodySensorBarchart extends StatelessWidget {
   final LogBloc logBloc;
   @override
   Widget build(BuildContext context) {
-    List<ChartLogs> chartsLogsData = [
-      ChartLogs(
-        [60, 60],
-        DateTime.parse('2021-01-06 00:41:03'),
-      ),
-      ChartLogs(
-        [35, 40],
-        DateTime.parse('2021-01-06 00:50:03'),
-      ),
-      ChartLogs(
-        [33, 50],
-        DateTime.parse('2021-01-06 00:59:03'),
-      ),
-    ];
     var _children = <Widget>[];
+    _buildChartBarDHT(chartsLogsData) {
+      return Container(
+        color: Colors.white,
+        child: SfCartesianChart(
+          legend: Legend(
+            isVisible: true,
+            position: LegendPosition.bottom,
+            overflowMode: LegendItemOverflowMode.wrap,
+          ),
+          tooltipBehavior: TooltipBehavior(
+            enable: true,
+          ),
+          primaryXAxis: NumericAxis(plotOffset: 0),
+          title: ChartTitle(
+              text: 'DHT Data Resources',
+              textStyle: TextStyle(color: Colors.black87)),
+          enableSideBySideSeriesPlacement: true,
+          series: <ChartSeries<ChartLogs, int>>[
+            ColumnSeries<ChartLogs, int>(
+              name: 'Temperature',
+              xAxisName: 'วันที่',
+              yAxisName: 'ค่าอุณหภูมิ',
+              enableTooltip: true,
+              animationDuration: 3000,
+              color: Colors.redAccent,
+              dataSource: chartsLogsData,
+              xValueMapper: (ChartLogs logs, _) =>
+                  logs.dateTime.millisecondsSinceEpoch,
+              yValueMapper: (ChartLogs logs, _) => logs.data[0],
+            ),
+            ColumnSeries<ChartLogs, int>(
+              name: 'Humidity',
+              enableTooltip: true,
+              animationDuration: 5000,
+              color: Colors.blueAccent,
+              dataSource: chartsLogsData,
+              xValueMapper: (ChartLogs logs, _) =>
+                  logs.dateTime.millisecondsSinceEpoch,
+              yValueMapper: (ChartLogs logs, _) => logs.data[1],
+            )
+          ],
+          onAxisLabelRender: (axisLabelRenderArgs) {
+            // print(axisLabelRenderArgs.text);
+            if (axisLabelRenderArgs.axisName == 'primaryXAxis') {
+              axisLabelRenderArgs.text = DateTime.fromMillisecondsSinceEpoch(
+                          axisLabelRenderArgs.value.toInt())
+                      .day
+                      .toString() +
+                  '/' +
+                  DateTime.fromMillisecondsSinceEpoch(
+                          axisLabelRenderArgs.value.toInt())
+                      .month
+                      .toString() +
+                  '/' +
+                  DateTime.fromMillisecondsSinceEpoch(
+                          axisLabelRenderArgs.value.toInt())
+                      .year
+                      .toString()
+                      .substring(2);
+            }
+          },
+          onTooltipRender: (tooltipArgs) {
+            var strMilliSec = tooltipArgs.text.substring(0, 14);
+            var intMilliSec = int.parse(strMilliSec);
+            var dateTime = DateTime.fromMillisecondsSinceEpoch(intMilliSec);
+
+            var dataVal = tooltipArgs.text.substring(14);
+            String _tooltipArgs =
+                'ณ วันที่ ${dateTime.day}/${dateTime.month}/${dateTime.year} ค่าเฉลี่ย$dataVal';
+
+            tooltipArgs.text = _tooltipArgs;
+          },
+        ),
+      );
+    }
+
     return BlocConsumer(
       cubit: logBloc,
       listener: (context, state) {},
       builder: (context, state) {
         if (state is LogInitial) {
-          logBloc.add(LogFetchedData(category));
+          logBloc.add(LogFetchedData(category, DateTime.now().year.toInt(),
+              DateTime.now().month.toInt()));
         } else if (state is LogFetchedLoading) {
           _children = <Widget>[
             Center(
@@ -44,31 +108,21 @@ class TabBodySensorBarchart extends StatelessWidget {
             )
           ];
         } else if (state is LogFetchedSuccess) {
-          // List<ChartLogs> chartsLogsData = state.chartLogs;
-          print(state.chartLogs[0].data[0]);
-
+          List<LogsData> chartsLogsData = state.logsData;
           switch (category) {
             case 'DHT':
               _children = <Widget>[
-                Container(
-                    child: SfCartesianChart(
-                  title: ChartTitle(text: 'DHT Data Resources'),
-                  enableSideBySideSeriesPlacement: false,
-                  series: <ChartSeries>[
-                    ColumnSeries<ChartLogs, dynamic>(
-                      dataSource: chartsLogsData,
-                      xValueMapper: (ChartLogs logs, _) => logs.date,
-                      yValueMapper: (ChartLogs logs, _) => logs.data[0],
-                    ),
-                    ColumnSeries<ChartLogs, dynamic>(
-                      opacity: 0.9,
-                      width: 0.4,
-                      dataSource: chartsLogsData,
-                      xValueMapper: (ChartLogs logs, _) => logs.date,
-                      yValueMapper: (ChartLogs logs, _) => logs.data[1],
-                    )
-                  ],
-                )),
+                _buildChartBarDHT(chartsLogsData),
+                Card(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 100,
+                        color: Colors.amberAccent,
+                      )
+                    ],
+                  ),
+                )
               ];
               break;
             case 'Soil Moisture':
@@ -82,12 +136,18 @@ class TabBodySensorBarchart extends StatelessWidget {
               break;
             default:
           }
-          _children = <Widget>[];
         } else if (state is LogFetchedFailure) {
           _children = <Widget>[
             Container(
               height: 200,
               color: Colors.red,
+            )
+          ];
+        } else if (state is LogError) {
+          _children = <Widget>[
+            ErrorWidgetState(
+              msg: state.errorMsg,
+              onPressed: null,
             )
           ];
         }

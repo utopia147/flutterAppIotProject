@@ -5,19 +5,16 @@ import 'package:equatable/equatable.dart';
 import 'package:projectcontrol_app/model/chart_logs.dart';
 import 'package:projectcontrol_app/model/logs.dart';
 import 'package:projectcontrol_app/resources/api_dio.dart';
-import 'package:projectcontrol_app/resources/repository.dart';
+import 'package:projectcontrol_app/resources/api_repository.dart';
 import 'package:projectcontrol_app/stream_api/stream_data.dart';
 
 part 'log_event.dart';
 part 'log_state.dart';
 
 class LogBloc extends Bloc<LogEvent, LogState> {
-  final Repository _repository;
-  final StreamData _streamData;
-  StreamSubscription _streamDataSubscription;
+  final ApiRepository _apiRepository;
   LogBloc(
-    this._repository,
-    this._streamData,
+    this._apiRepository,
   ) : super(LogInitial());
 
   @override
@@ -29,29 +26,24 @@ class LogBloc extends Bloc<LogEvent, LogState> {
     }
   }
 
-  @override
-  Future<void> close() {
-    _streamDataSubscription?.cancel();
-    return super.close();
-  }
-
   Stream<LogState> _mapLogFetchedDataToState(event) async* {
     try {
       print('Log:${event.category}');
       yield LogFetchedLoading();
       await Future.delayed(Duration(seconds: 2));
       String category = event.category;
-      List<ChartLogs> chartLogs =
-          await _repository.fetchChartLogsData(category);
+      int fetchYear = event.fetchYear;
+      int fetchMonth = event.fetchMonth;
+      List<LogsData> logsData = await _apiRepository.fetchChartLogsData(
+          category, fetchYear, fetchMonth);
 
-      if (chartLogs.length != 0) {
-        print('Logs Fetched Done');
-
-        yield LogFetchedSuccess(chartLogs);
+      if (logsData.length != 0) {
+        yield LogFetchedSuccess(logsData);
       } else {
-        print('Log Fetched Failed');
         yield LogFetchedFailure();
       }
-    } catch (e) {}
+    } catch (e) {
+      yield LogError(e.toString());
+    }
   }
 }

@@ -67,6 +67,9 @@ class ApiProvider {
       if (res.statusCode == 200) {
         List<LogsData> _logsData = logsDataFromJson(res.data);
         return _logsData;
+      } else {
+        List<LogsData> _logsData = [];
+        return _logsData;
       }
     } catch (e) {
       print('FetchLogDataError:$e');

@@ -9,7 +9,9 @@ abstract class LogEvent extends Equatable {
 
 class LogFetchedData extends LogEvent {
   final String category;
-  LogFetchedData(this.category);
+  final int fetchYear;
+  final int fetchMonth;
+  LogFetchedData(this.category, this.fetchYear, this.fetchMonth, );
   @override
-  List<Object> get props => [category];
+  List<Object> get props => [category, fetchYear , fetchMonth];
 }

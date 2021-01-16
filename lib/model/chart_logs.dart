@@ -1,6 +1,6 @@
 class ChartLogs {
   final List<dynamic> data;
-  final DateTime date;
+  final DateTime dateTime;
 
-  ChartLogs(this.data, this.date);
+  ChartLogs(this.data, this.dateTime);
 }
