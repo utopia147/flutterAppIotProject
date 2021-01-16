@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projectcontrol_app/bloc/bloc_log/log_bloc.dart';
-import 'package:projectcontrol_app/model/chart_logs.dart';
 import 'package:projectcontrol_app/model/logs.dart';
 import 'package:projectcontrol_app/view/state_widget/error_state.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -35,8 +34,8 @@ class TabBodySensorBarchart extends StatelessWidget {
               text: 'DHT Data Resources',
               textStyle: TextStyle(color: Colors.black87)),
           enableSideBySideSeriesPlacement: true,
-          series: <ChartSeries<ChartLogs, int>>[
-            ColumnSeries<ChartLogs, int>(
+          series: <ChartSeries<LogsData, dynamic>>[
+            ColumnSeries<LogsData, dynamic>(
               name: 'Temperature',
               xAxisName: 'วันที่',
               yAxisName: 'ค่าอุณหภูมิ',
@@ -44,23 +43,29 @@ class TabBodySensorBarchart extends StatelessWidget {
               animationDuration: 3000,
               color: Colors.redAccent,
               dataSource: chartsLogsData,
-              xValueMapper: (ChartLogs logs, _) =>
-                  logs.dateTime.millisecondsSinceEpoch,
-              yValueMapper: (ChartLogs logs, _) => logs.data[0],
+              xValueMapper: (LogsData logs, _) {
+                var _dateTime =
+                    DateTime(logs.id.year, logs.id.month, logs.id.day);
+                return _dateTime.millisecondsSinceEpoch;
+              },
+              yValueMapper: (LogsData logs, _) => logs.avgValue1,
             ),
-            ColumnSeries<ChartLogs, int>(
+            ColumnSeries<LogsData, dynamic>(
               name: 'Humidity',
               enableTooltip: true,
               animationDuration: 5000,
               color: Colors.blueAccent,
               dataSource: chartsLogsData,
-              xValueMapper: (ChartLogs logs, _) =>
-                  logs.dateTime.millisecondsSinceEpoch,
-              yValueMapper: (ChartLogs logs, _) => logs.data[1],
+              xValueMapper: (LogsData logs, _) {
+                var _dateTime =
+                    DateTime(logs.id.year, logs.id.month, logs.id.day);
+                return _dateTime.millisecondsSinceEpoch;
+              },
+              yValueMapper: (LogsData logs, _) => logs.avgValue2,
             )
           ],
           onAxisLabelRender: (axisLabelRenderArgs) {
-            // print(axisLabelRenderArgs.text);
+            print(axisLabelRenderArgs.text);
             if (axisLabelRenderArgs.axisName == 'primaryXAxis') {
               axisLabelRenderArgs.text = DateTime.fromMillisecondsSinceEpoch(
                           axisLabelRenderArgs.value.toInt())
@@ -80,6 +85,7 @@ class TabBodySensorBarchart extends StatelessWidget {
             }
           },
           onTooltipRender: (tooltipArgs) {
+            print(tooltipArgs.text);
             var strMilliSec = tooltipArgs.text.substring(0, 14);
             var intMilliSec = int.parse(strMilliSec);
             var dateTime = DateTime.fromMillisecondsSinceEpoch(intMilliSec);

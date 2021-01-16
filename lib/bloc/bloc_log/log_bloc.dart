@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:projectcontrol_app/model/chart_logs.dart';
 import 'package:projectcontrol_app/model/logs.dart';
 import 'package:projectcontrol_app/resources/api_dio.dart';
 import 'package:projectcontrol_app/resources/api_repository.dart';
