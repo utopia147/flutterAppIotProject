@@ -132,7 +132,7 @@ class BodyHomeMobliePortrait extends StatelessWidget {
                     Container(
                       margin: MediaQuery.of(context).padding * 2,
                       child: Center(
-                        child: CircularProgressIndicator(),
+                        child: RefreshProgressIndicator(),
                       ),
                     ),
                   ];
@@ -237,7 +237,7 @@ class BodyHomeMobileLandscape extends StatelessWidget {
                       },
                     );
                   } else if (state is LoadingHomeState) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: RefreshProgressIndicator());
                   }
                   return GridView.builder(
                       padding: EdgeInsets.only(top: 43),

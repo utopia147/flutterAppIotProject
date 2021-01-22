@@ -28,7 +28,7 @@ class LogBloc extends Bloc<LogEvent, LogState> {
     try {
       print('Log:${event.category}');
       yield LogFetchedLoading();
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(milliseconds: 500));
       String category = event.category;
       int fetchYear = event.fetchYear;
       int fetchMonth = event.fetchMonth;

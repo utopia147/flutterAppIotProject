@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 import 'package:projectcontrol_app/bloc/bloc_log/log_bloc.dart';
 import 'package:projectcontrol_app/model/logs.dart';
 import 'package:projectcontrol_app/view/state_widget/error_state.dart';
@@ -65,7 +67,7 @@ class TabBodySensorBarchart extends StatelessWidget {
             )
           ],
           onAxisLabelRender: (axisLabelRenderArgs) {
-            print(axisLabelRenderArgs.text);
+            // print(axisLabelRenderArgs.text);
             if (axisLabelRenderArgs.axisName == 'primaryXAxis') {
               axisLabelRenderArgs.text = DateTime.fromMillisecondsSinceEpoch(
                           axisLabelRenderArgs.value.toInt())
@@ -85,7 +87,7 @@ class TabBodySensorBarchart extends StatelessWidget {
             }
           },
           onTooltipRender: (tooltipArgs) {
-            print(tooltipArgs.text);
+            // print(tooltipArgs.text);
             var strMilliSec = tooltipArgs.text.substring(0, 14);
             var intMilliSec = int.parse(strMilliSec);
             var dateTime = DateTime.fromMillisecondsSinceEpoch(intMilliSec);
@@ -110,7 +112,7 @@ class TabBodySensorBarchart extends StatelessWidget {
         } else if (state is LogFetchedLoading) {
           _children = <Widget>[
             Center(
-              child: CircularProgressIndicator(),
+              child: RefreshProgressIndicator(),
             )
           ];
         } else if (state is LogFetchedSuccess) {
@@ -118,17 +120,35 @@ class TabBodySensorBarchart extends StatelessWidget {
           switch (category) {
             case 'DHT':
               _children = <Widget>[
-                _buildChartBarDHT(chartsLogsData),
-                Card(
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 100,
-                        color: Colors.amberAccent,
-                      )
-                    ],
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Container(
+                    color: Colors.white,
+                    child: ListTile(
+                      leading: Icon(Icons.calendar_today),
+                      title: Text(
+                        'ดูข้อมูล ณ ปี${state.logsData[0].id.year} เดือนที่${state.logsData[0].id.month}',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      trailing: Icon(Icons.arrow_downward),
+                      onTap: () {
+                        return DatePicker.showDatePicker(
+                          context,
+                          pickerTheme:
+                              DateTimePickerTheme(confirm: Text('ยืนยัน')),
+                          initialDateTime: DateTime.now(),
+                          dateFormat: 'MMMM-yyyy',
+                          onConfirm: (date, index) {
+                            print('Date:$date');
+                            logBloc.add(LogFetchedData(
+                                category, date.year, date.month));
+                          },
+                        );
+                      },
+                    ),
                   ),
-                )
+                ),
+                _buildChartBarDHT(chartsLogsData),
               ];
               break;
             case 'Soil Moisture':

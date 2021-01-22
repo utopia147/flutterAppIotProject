@@ -6,6 +6,7 @@ import 'package:projectcontrol_app/view/screen/Sensor/Components/Mobile/TabView/
 import 'package:projectcontrol_app/view/screen/Sensor/Components/Mobile/TabView/Components/soilmoistrue_gauge_widget.dart';
 import 'package:projectcontrol_app/view/screen/Sensor/Components/Mobile/TabView/Components/ultrasonic_gauge_widget.dart';
 import 'package:projectcontrol_app/view/screen/Sensor/Components/Mobile/TabView/Components/voltage_gauge_widget.dart';
+import 'package:projectcontrol_app/view/state_widget/add_widget.dart';
 
 import 'package:projectcontrol_app/view/state_widget/alert_state.dart';
 import 'package:projectcontrol_app/view/state_widget/empty_state.dart';
@@ -133,7 +134,7 @@ class TabBodySensorGagueWidget extends StatelessWidget {
         } else if (state is LoadingStreamState) {
           sensorWidget = <Widget>[
             Center(
-              child: CircularProgressIndicator(),
+              child: RefreshProgressIndicator(),
             )
           ];
         } else if (state is LoadedStreamState) {

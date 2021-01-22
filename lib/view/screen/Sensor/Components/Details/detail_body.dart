@@ -254,7 +254,7 @@ class DetailBodySensor extends StatelessWidget {
             if (state is SensorInitial) {
               _sensorBloc.add(LoadDataSensor(sensors));
             } else if (state is LoadingStreamState) {
-              children = <Widget>[Center(child: CircularProgressIndicator())];
+              children = <Widget>[Center(child: RefreshProgressIndicator())];
             } else if (state is LoadedStreamState) {
               List snapshotList = state.response;
               // print(snapshotList);

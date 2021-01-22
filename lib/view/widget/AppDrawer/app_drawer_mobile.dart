@@ -274,7 +274,7 @@ class _AppDrawerMobilePortrait extends State<AppDrawerMobilePortrait> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return userAccountsDrawerHeader(snapshot.data);
                       }
-                      return CircularProgressIndicator();
+                      return RefreshProgressIndicator();
                     },
                   ),
                 ),
@@ -549,7 +549,7 @@ class _AppDrawerMobileLandscape extends State<AppDrawerMobileLandscape> {
                     if (snapshot.connectionState == ConnectionState.done) {
                       return userAccountsDrawerHeader(snapshot.data);
                     }
-                    return CircularProgressIndicator();
+                    return RefreshProgressIndicator();
                   },
                 ),
                 Column(

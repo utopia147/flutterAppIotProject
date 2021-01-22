@@ -158,7 +158,7 @@ class BodyRelayPortrait extends StatelessWidget {
                 );
               } else if (state is LoadingApiState) {
                 relayWidget = Center(
-                  child: CircularProgressIndicator(),
+                  child: RefreshProgressIndicator(),
                 );
               } else if (state is ErrorRelayState) {
                 relayWidget = ErrorWidgetState(
@@ -335,7 +335,7 @@ class BodyRelayLandScape extends StatelessWidget {
                       );
                     } else if (state is LoadingApiState) {
                       relayWidget = Center(
-                        child: CircularProgressIndicator(),
+                        child: RefreshProgressIndicator(),
                       );
                     } else if (state is ErrorRelayState) {
                       relayWidget = ErrorWidgetState(

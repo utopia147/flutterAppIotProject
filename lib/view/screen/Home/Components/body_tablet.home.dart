@@ -308,7 +308,7 @@ class BodyHome extends StatelessWidget {
                       ),
                     );
                   } else if (state is LoadingHomeState) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: RefreshProgressIndicator());
                   }
                   return GridView.builder(
                       padding: EdgeInsets.zero,
