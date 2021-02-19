@@ -15,7 +15,6 @@ jobs:
     # available. See https://hub.docker.com/r/google/dart/ for the available
     # images.
 
-
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
